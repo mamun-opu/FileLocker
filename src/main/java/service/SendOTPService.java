@@ -11,7 +11,7 @@ public class SendOTPService {
         String to = email;
 
         // Sender's email ID needs to be mentioned
-        String from = "";
+        String from = "aalmamunapu@gmail.com";
 
         // Assuming you are sending email from through gmails smtp
         String host = "smtp.gmail.com";
@@ -30,7 +30,7 @@ public class SendOTPService {
 
             protected PasswordAuthentication getPasswordAuthentication() {
 
-                return new PasswordAuthentication(from, "");
+                return new PasswordAuthentication(from, "slbf aszf ctzk njoo");
 
             }
 
@@ -50,7 +50,7 @@ public class SendOTPService {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
             // Set Subject: header field
-            message.setSubject("File Enc ka OTP");
+            message.setSubject("File locker OTP: ");
 
             // Now set the actual message
             message.setText("Your One time Password for File Enc app is " + genOTP);
