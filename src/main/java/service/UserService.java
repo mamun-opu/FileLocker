@@ -16,5 +16,6 @@ public class UserService {
         } catch (SQLException ex){
             ex.printStackTrace();
         }
-        return null;    }
+        return null;
+    }
 }

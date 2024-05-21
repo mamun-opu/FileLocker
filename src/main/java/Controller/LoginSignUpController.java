@@ -98,9 +98,7 @@ public class LoginSignUpController {
     class VerifyButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String enteredCode = view.verificationCodeField.getText();
-            System.out.println("---"+enteredCode+"---");
 
-            System.out.println("---"+getVerificationCode()+"---");
             if (getVerificationCode().trim().equals(enteredCode)) {
 //                String name = view.signupNameField.getText();
 //                String email = view.signupEmailField.getText();
