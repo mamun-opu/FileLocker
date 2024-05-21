@@ -75,15 +75,15 @@ public class LoginSignUpController {
             String email = view.loginEmailField.getText();
 
             String password = new String(view.loginPasswordField.getPassword());
-            // Handle login logic
-//            User user = new User(getName(), getEmail(), getPassword());
-//            UserDAO.isExists(user.getEmail());
+
             setEmail(email);
             setPassword(password);
             try {
                 if(UserDAO.isUser(getEmail(), getPassword())) {
                     JOptionPane.showMessageDialog(view, "Login successful!");
-                    new MenuView().setVisible(true);
+                    MenuView menuView = new MenuView(getEmail());
+                    new MenuController(menuView); // Initialize MenuController
+                    menuView.setVisible(true);
                     // Close the current frame
                     view.dispose();
                 }else {
@@ -124,16 +124,12 @@ public class LoginSignUpController {
             String enteredCode = view.verificationCodeField.getText();
 
             if (getVerificationCode().trim().equals(enteredCode)) {
-//                String name = view.signupNameField.getText();
-//                String email = view.signupEmailField.getText();
-//                String password = new String(view.signupPasswordField.getPassword());
-//                UserService.saveUser();
 
                 setUser(new User(getName(), getEmail(), getPassword()));
                 UserService.saveUser(getUser());
                 JOptionPane.showMessageDialog(view, "Signup successful for " + getName() + "!");
                 // Open new menu frame
-                new MenuView().setVisible(true);
+                new MenuView(getEmail()).setVisible(true);
                 // Close the current frame
                 view.dispose();
             } else {

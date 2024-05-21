@@ -19,14 +19,6 @@ public class MenuView extends JFrame {
         setLocationRelativeTo(null);
         initComponents();
     }
-    public MenuView() {
-        setTitle("Menu");
-        setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        initComponents();
-    }
-
 
     private void initComponents() {
         setLayout(new GridLayout(4, 1));

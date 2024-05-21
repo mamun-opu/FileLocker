@@ -10,6 +10,7 @@ import java.util.List;
 
 public class FileDAO {
     public static List<File> getAllFiles (String email) throws SQLException {
+        System.out.println("get all files!!!!!!!!");
         Connection connection = MyConnection.getConnection();
         PreparedStatement pStatement = connection.prepareStatement("select * from files where email = ?");
         pStatement.setString(1, email);
