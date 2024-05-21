@@ -68,7 +68,7 @@ public class Welcome {
         String otp = scanner.nextLine();
 
         if (genOTP.equals(otp)) {
-            User user = new User(name, email);
+            User user = new User(name, email, password);
             // Save password with user information
             int response = UserService.saveUser(user);
             switch (response) {

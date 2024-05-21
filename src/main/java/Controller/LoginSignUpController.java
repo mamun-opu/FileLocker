@@ -1,5 +1,6 @@
 package Controller;
 
+import dao.UserDAO;
 import model.User;
 import service.GenerateOTP;
 import service.SendOTPService;
@@ -10,6 +11,7 @@ import views.MenuView;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class LoginSignUpController {
     private LoginSignUpView view;
@@ -17,6 +19,7 @@ public class LoginSignUpController {
     private String name;
     private String email;
     private String password;
+    private User user;
 
     public LoginSignUpController(LoginSignUpView view) {
         this.view = view;
@@ -25,6 +28,14 @@ public class LoginSignUpController {
         this.view.loginButton.addActionListener(new LoginButtonListener());
         this.view.signupButton.addActionListener(new SignupButtonListener());
         this.view.verifyButton.addActionListener(new VerifyButtonListener());
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -62,12 +73,24 @@ public class LoginSignUpController {
     class LoginButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String email = view.loginEmailField.getText();
+
             String password = new String(view.loginPasswordField.getPassword());
             // Handle login logic
-            if ("user@example.com".equals(email) && "password".equals(password)) {
-                JOptionPane.showMessageDialog(view, "Login successful!");
-            } else {
-                JOptionPane.showMessageDialog(view, "Invalid email or password.");
+//            User user = new User(getName(), getEmail(), getPassword());
+//            UserDAO.isExists(user.getEmail());
+            setEmail(email);
+            setPassword(password);
+            try {
+                if(UserDAO.isUser(getEmail(), getPassword())) {
+                    JOptionPane.showMessageDialog(view, "Login successful!");
+                    new MenuView().setVisible(true);
+                    // Close the current frame
+                    view.dispose();
+                }else {
+                    JOptionPane.showMessageDialog(view, "Invalid email or password.");
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
         }
     }
@@ -81,6 +104,7 @@ public class LoginSignUpController {
             setName(name);
             setEmail(email);
             setPassword(password);
+
 
             setVerificationCode(GenerateOTP.getOTP());
             if (SendOTPService.sendOTP(getEmail(), getVerificationCode())){
@@ -105,8 +129,8 @@ public class LoginSignUpController {
 //                String password = new String(view.signupPasswordField.getPassword());
 //                UserService.saveUser();
 
-                User user = new User(getName(), getEmail(), getPassword());
-                UserService.saveUser(user);
+                setUser(new User(getName(), getEmail(), getPassword()));
+                UserService.saveUser(getUser());
                 JOptionPane.showMessageDialog(view, "Signup successful for " + getName() + "!");
                 // Open new menu frame
                 new MenuView().setVisible(true);
