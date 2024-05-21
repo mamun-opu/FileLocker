@@ -6,7 +6,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class SendOTPService {
-    public static void sendOTP(String email, String genOTP) {
+    public static boolean sendOTP(String email, String genOTP) {
         // Recipient's email ID needs to be mentioned.
         String to = email;
 
@@ -59,8 +59,10 @@ public class SendOTPService {
             // Send message
             Transport.send(message);
             System.out.println("Sent message successfully....");
+            return true;
         } catch (MessagingException mex) {
             mex.printStackTrace();
+            return false;
         }
 
     }

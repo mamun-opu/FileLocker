@@ -1,5 +1,9 @@
 package Controller;
 
+import model.User;
+import service.GenerateOTP;
+import service.SendOTPService;
+import service.UserService;
 import views.LoginSignUpView;
 import views.MenuView;
 
@@ -10,6 +14,9 @@ import java.awt.event.ActionListener;
 public class LoginSignUpController {
     private LoginSignUpView view;
     private String verificationCode;
+    private String name;
+    private String email;
+    private String password;
 
     public LoginSignUpController(LoginSignUpView view) {
         this.view = view;
@@ -18,6 +25,38 @@ public class LoginSignUpController {
         this.view.loginButton.addActionListener(new LoginButtonListener());
         this.view.signupButton.addActionListener(new SignupButtonListener());
         this.view.verifyButton.addActionListener(new VerifyButtonListener());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 
     class LoginButtonListener implements ActionListener {
@@ -39,23 +78,38 @@ public class LoginSignUpController {
             String email = view.signupEmailField.getText();
             String password = new String(view.signupPasswordField.getPassword());
             // Handle signup logic: send verification code
-            verificationCode = "123456"; // Mock verification code
-            JOptionPane.showMessageDialog(view, "Verification code sent to your email.");
-            // Show verification fields
-            view.verificationCodeLabel.setVisible(true);
-            view.verificationCodeField.setVisible(true);
-            view.verifyButton.setVisible(true);
+            setName(name);
+            setEmail(email);
+            setPassword(password);
+
+            setVerificationCode(GenerateOTP.getOTP());
+            if (SendOTPService.sendOTP(getEmail(), getVerificationCode())){
+                JOptionPane.showMessageDialog(view, "Verification code sent to your email.");
+
+                view.verificationCodeLabel.setVisible(true);
+                view.verificationCodeField.setVisible(true);
+                view.verifyButton.setVisible(true);
+            }else {
+                JOptionPane.showMessageDialog(view, "There is an error sending OTP");
+            }
         }
     }
 
     class VerifyButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String enteredCode = view.verificationCodeField.getText();
-            if (verificationCode.equals(enteredCode)) {
-                String name = view.signupNameField.getText();
-                String email = view.signupEmailField.getText();
-                String password = new String(view.signupPasswordField.getPassword());
-                JOptionPane.showMessageDialog(view, "Signup successful for " + name + "!");
+            System.out.println("---"+enteredCode+"---");
+
+            System.out.println("---"+getVerificationCode()+"---");
+            if (getVerificationCode().trim().equals(enteredCode)) {
+//                String name = view.signupNameField.getText();
+//                String email = view.signupEmailField.getText();
+//                String password = new String(view.signupPasswordField.getPassword());
+//                UserService.saveUser();
+
+                User user = new User(getName(), getEmail(), getPassword());
+                UserService.saveUser(user);
+                JOptionPane.showMessageDialog(view, "Signup successful for " + getName() + "!");
                 // Open new menu frame
                 new MenuView().setVisible(true);
                 // Close the current frame
