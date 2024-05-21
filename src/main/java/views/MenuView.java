@@ -2,46 +2,33 @@ package views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class MenuView extends JFrame {
-    public MenuView() {
-        setTitle("Menu");
-        setSize(300, 200);
+    private final String email;
+    public JButton showHiddenFilesButton = new JButton("Show Hidden Files");
+    public JButton hideFileButton = new JButton("Hide File");
+    public JButton unhideFileButton = new JButton("Unhide File");
+    public JButton exitButton = new JButton("Exit");
+
+    public MenuView(String email) {
+        this.email = email;
+        setTitle("File Locker - Main Menu");
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initComponents();
     }
 
     private void initComponents() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1));
-
-        JButton option1Button = new JButton("Option 1");
-        JButton option2Button = new JButton("Option 2");
-        JButton option3Button = new JButton("Option 3");
-        JButton exitButton = new JButton("Exit");
-
-        option1Button.addActionListener(e -> handleOption(1));
-        option2Button.addActionListener(e -> handleOption(2));
-        option3Button.addActionListener(e -> handleOption(3));
-        exitButton.addActionListener(e -> System.exit(0));
-
-        panel.add(option1Button);
-        panel.add(option2Button);
-        panel.add(option3Button);
-        panel.add(exitButton);
-
-        getContentPane().add(panel);
+        setLayout(new GridLayout(4, 1));
+        add(showHiddenFilesButton);
+        add(hideFileButton);
+        add(unhideFileButton);
+        add(exitButton);
     }
 
-    private void handleOption(int option) {
-        JOptionPane.showMessageDialog(this, "Option " + option + " selected.");
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MenuView menuFrame = new MenuView();
-            menuFrame.setVisible(true);
-        });
+    public String getEmail() {
+        return email;
     }
 }

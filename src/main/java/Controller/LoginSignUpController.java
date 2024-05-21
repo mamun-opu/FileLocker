@@ -1,33 +1,46 @@
 package Controller;
+
+import dao.UserDAO;
+import model.User;
 import views.LoginSignUpView;
 import views.MenuView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class LoginSignUpController {
     private LoginSignUpView view;
-    private String verificationCode;
+    private UserDAO userDAO;
 
     public LoginSignUpController(LoginSignUpView view) {
         this.view = view;
+        this.userDAO = new UserDAO();
 
         // Add action listeners
         this.view.loginButton.addActionListener(new LoginButtonListener());
         this.view.signupButton.addActionListener(new SignupButtonListener());
-        this.view.verifyButton.addActionListener(new VerifyButtonListener());
     }
 
     class LoginButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String email = view.loginEmailField.getText();
             String password = new String(view.loginPasswordField.getPassword());
-            // Handle login logic
-            if ("user@example.com".equals(email) && "password".equals(password)) {
-                JOptionPane.showMessageDialog(view, "Login successful!");
-            } else {
-                JOptionPane.showMessageDialog(view, "Invalid email or password.");
+            // For now, skip password verification for simplicity
+            try {
+                if (userDAO.isExists(email)) {
+                    JOptionPane.showMessageDialog(view, "Login successful!");
+                    view.dispose();
+                    MenuView menuView = new MenuView(email);
+                    new MenuController(menuView);
+                    menuView.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(view, "Email not found!");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(view, "Database error: " + ex.getMessage());
             }
         }
     }
@@ -37,32 +50,19 @@ public class LoginSignUpController {
             String name = view.signupNameField.getText();
             String email = view.signupEmailField.getText();
             String password = new String(view.signupPasswordField.getPassword());
-            // Handle signup logic: send verification code
-            verificationCode = "123456"; // Mock verification code
-            JOptionPane.showMessageDialog(view, "Verification code sent to your email.");
-            // Show verification fields
-            view.verificationCodeLabel.setVisible(true);
-            view.verificationCodeField.setVisible(true);
-            view.verifyButton.setVisible(true);
-        }
-    }
+            User user = new User(name, email);
 
-    class VerifyButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            // For testing purposes, we skip the code check
-            // String enteredCode = view.verificationCodeField.getText();
-            // if (verificationCode.equals(enteredCode)) {
-            String name = view.signupNameField.getText();
-            String email = view.signupEmailField.getText();
-            String password = new String(view.signupPasswordField.getPassword());
-            JOptionPane.showMessageDialog(view, "Signup successful for " + name + "!");
-            // Open new menu frame
-            new MenuView().setVisible(true);
-            // Close the current frame
-            view.dispose();
-            // } else {
-            //    JOptionPane.showMessageDialog(view, "Invalid verification code.");
-            // }
+            try {
+                if (!userDAO.isExists(email)) {
+                    userDAO.saveUser(user);
+                    JOptionPane.showMessageDialog(view, "Signup successful!");
+                } else {
+                    JOptionPane.showMessageDialog(view, "Email already exists!");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(view, "Database error: " + ex.getMessage());
+            }
         }
     }
 }
