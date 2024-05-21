@@ -54,7 +54,7 @@ public class FileDAO {
             fw.write((char) i);
         }
         fw.close();
-        ps = connection.prepareStatement("deletr from files where id = ?");
+        ps = connection.prepareStatement("delete from files where id = ?");
         ps.setInt(1, id);
         ps.executeUpdate();
         System.out.println("Successfully unhidden");
