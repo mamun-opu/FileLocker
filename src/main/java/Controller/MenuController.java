@@ -27,7 +27,6 @@ public class MenuController {
     class ShowHiddenFilesListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
-                System.out.println("show button clickeddddddddddddddddddddd");
                 List<File> files = FileDAO.getAllFiles(view.getEmail());
                 StringBuilder fileList = new StringBuilder("ID - File Name\n");
                 for (File file : files) {

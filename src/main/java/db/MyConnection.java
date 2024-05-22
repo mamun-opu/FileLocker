@@ -13,7 +13,6 @@ public class MyConnection {
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("successfully connected!");
         return connection;
     }
     public static void closeConnection(){

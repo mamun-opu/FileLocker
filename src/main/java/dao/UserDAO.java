@@ -36,8 +36,6 @@ public class UserDAO {
         while(result.next()){
             String mail = result.getString(1);
             String pass = result.getString(2);
-            System.out.println("--" +mail + " : " +email +"--");
-            System.out.println("--" +pass + " : " +password +"--");
             if(mail.equals(email) && pass.equals(password))return true;
         }
         return false;
