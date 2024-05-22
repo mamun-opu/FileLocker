@@ -30,7 +30,8 @@ File Locker is a Java-based application that allows users to securely hide and u
     CREATE TABLE users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
-        email VARCHAR(100) NOT NULL UNIQUE
+        email VARCHAR(100) NOT NULL UNIQUE,
+        password VARCHAR(30) NOT NULL
     );
 
     CREATE TABLE files (
