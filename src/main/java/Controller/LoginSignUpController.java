@@ -129,7 +129,12 @@ public class LoginSignUpController {
                 UserService.saveUser(getUser());
                 JOptionPane.showMessageDialog(view, "Signup successful for " + getName() + "!");
                 // Open new menu frame
-                new MenuView(getEmail()).setVisible(true);
+//                new MenuView(getEmail()).setVisible(true);
+//                // Close the current frame
+//                view.dispose();
+                MenuView menuView = new MenuView(getEmail());
+                new MenuController(menuView); // Initialize MenuController
+                menuView.setVisible(true);
                 // Close the current frame
                 view.dispose();
             } else {
